@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxury Calendar</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+}
+
+.calendar{
+    background: #111;
+    padding:30px;
+    border-radius:20px;
+    width:350px;
+    box-shadow:0 0 40px rgba(212,175,55,0.5);
+    text-align:center;
+    color:white;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.header button{
+    background:linear-gradient(45deg,#d4af37,#ffd700);
+    border:none;
+    padding:8px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.monthYear{
+    font-size:20px;
+    color:#d4af37;
+    font-weight:bold;
+}
+
+.days, .dates{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:10px;
+}
+
+.days div{
+    color:#d4af37;
+    font-weight:bold;
+}
+
+.dates div{
+    padding:10px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.dates div:hover{
+    background:#d4af37;
+    color:black;
+}
+
+.selected{
+    background:gold;
+    color:black;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="calendar">
+    <div class="header">
+        <button onclick="prevMonth()">❮</button>
+        <div class="monthYear" id="monthYear"></div>
+        <button onclick="nextMonth()">❯</button>
+    </div>
+
+    <div class="days">
+        <div>S</div><div>M</div><div>T</div>
+        <div>W</div><div>T</div><div>F</div><div>S</div>
+    </div>
+
+    <div class="dates" id="dates"></div>
+</div>
+
+<script>
+
+let date = new Date();
+let currentMonth = date.getMonth();
+let currentYear = 2026; // ✨ غيري السنة من هنا
+
+const monthYear = document.getElementById("monthYear");
+const datesContainer = document.getElementById("dates");
+
+function renderCalendar(){
+    datesContainer.innerHTML="";
+    const firstDay = new Date(currentYear,currentMonth,1).getDay();
+    const lastDate = new Date(currentYear,currentMonth+1,0).getDate();
+
+    const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+    monthYear.innerText = monthNames[currentMonth] + " " + currentYear;
+
+    for(let i=0;i<firstDay;i++){
+        datesContainer.innerHTML += "<div></div>";
+    }
+
+    for(let i=1;i<=lastDate;i++){
+        let div = document.createElement("div");
+        div.innerText = i;
+        div.onclick = function(){
+            document.querySelectorAll(".dates div").forEach(d=>d.classList.remove("selected"));
+            div.classList.add("selected");
+        }
+        datesContainer.appendChild(div);
+    }
+}
+
+function prevMonth(){
+    currentMonth--;
+    if(currentMonth<0){
+        currentMonth=11;
+        currentYear--;
+    }
+    renderCalendar();
+}
+
+function nextMonth(){
+    currentMonth++;
+    if(currentMonth>11){
+        currentMonth=0;
+        currentYear++;
+    }
+    renderCalendar();
+}
+
+renderCalendar();
+
+</script>
+
+</body>
+</html>
